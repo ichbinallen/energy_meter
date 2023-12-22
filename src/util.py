@@ -122,6 +122,7 @@ def create_mod_data(load, weather):
     returns: pd.DataFrame mod_data
     """
     mod_data = load.reset_index().copy()
+    mod_data = mod_data.merge(weather, on="ds", how="outer")
     mod_data["dow"] = mod_data.ds.dt.dayofweek
     mod_data["school_break"] = (
         (mod_data.ds.dt.month.isin([6, 5, 8]))  # Summer Time
@@ -133,7 +134,6 @@ def create_mod_data(load, weather):
         )  # Winter Holiday Jan
     )
     mod_data = pd.get_dummies(mod_data, prefix="dow", prefix_sep="_", columns=["dow"])
-    mod_data = mod_data.merge(weather, on="ds", how="left")
 
     return mod_data
 
