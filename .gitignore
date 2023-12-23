@@ -1,0 +1,4 @@
+./models/*
+./data/*
+./lightning_logs/*
+./np_env/*

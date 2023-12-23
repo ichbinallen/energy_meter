@@ -89,7 +89,7 @@ def objective(trial):
 
 
 study = optuna.create_study(direction="minimize")
-study.optimize(objective, n_trials=1000)
+study.optimize(objective, n_trials=1000, n_jobs=-1)
 
 study.best_params
 joblib.dump(study, "./models/prophet_study.pkl")
