@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 from sktime.transformations.series.lag import Lag
 
 
-def read_load(fn):
+def read_load(fn, method="ts"):
     """
     read energy load data from csv
     """
@@ -35,6 +35,19 @@ def read_load(fn):
     df = df.asfreq("H")
     df.interpolate(method="linear", inplace=True)
     df.reset_index(inplace=True)
+
+    if method == "ts":
+        pass
+    elif method == "classification":
+        df["daily_max_load"] = df.groupby(df.ds.dt.strftime("%Y-%m-%d"))["y"].transform(
+            max
+        )
+        df["is_max"] = (df["y"] == df["daily_max_load"]).astype(int)
+        del df["daily_max_load"]
+    else:
+        raise (
+            f"method {method} not implemented. must be one of 'ts' or 'classification'"
+        )
 
     return df
 
